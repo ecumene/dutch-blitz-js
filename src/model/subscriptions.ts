@@ -10,13 +10,26 @@
 // changes. The subscription "fires" when the result of the query changes.
 
 import type { Reflect } from "@rocicorp/reflect/client";
-import { useSubscribe } from "@rocicorp/reflect/react";
-import { getClientState } from "./client-state.js";
+import { usePresence, useSubscribe } from "@rocicorp/reflect/react";
+import { getClientState, listClientIDs } from "./client-state.js";
 import type { M } from "./mutators.js";
 import { getStackState, listStackIDs } from "./cards.js";
 
 export function useCount(reflect: Reflect<M>, key: string) {
   return useSubscribe(reflect, (tx) => tx.get<number>(key), 0);
+}
+
+export function useUser(r: Reflect<M>) {
+  return useSubscribe(r, (tx) => getClientState(tx, r.clientID), null);
+}
+
+export function useCompetitors(r: Reflect<M>) {
+  const clients = useClientIDs(r);
+  return clients.filter((client) => client.id !== r.clientID);
+}
+
+export function useClientIDs(r: Reflect<M>) {
+  return useSubscribe(r, listClientIDs, []);
 }
 
 export function useClientState(r: Reflect<M>, id: string) {

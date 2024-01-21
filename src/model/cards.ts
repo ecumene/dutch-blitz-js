@@ -8,18 +8,18 @@ export type CardNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 export const cardColors: CardColor[] = ["red", "green", "blue", "yellow"];
 export const cardNumbers: CardNumber[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-export type CardStack = {
+export type BlitzCardStack = {
   color: CardColor;
-  cardStack: Card[];
+  cardStack: BlitzCard[];
   currentNumber: CardNumber;
 };
 
-export type StackState = Entity & {
+export type BlitzCardStackState = Entity & {
   location: Location | null;
-  stack: CardStack;
+  stack: BlitzCardStack;
 };
 
-export type Card = {
+export type BlitzCard = {
   owner: UserInfo;
   color: CardColor;
   number: CardNumber;
@@ -39,12 +39,12 @@ const {
   get: getStackState,
   put: putStackState,
   update: updateStackState,
-} = generate<StackState>("stack-state");
+} = generate<BlitzCardStackState>("stack-state");
 
 function initStackState(
   tx: WriteTransaction,
   location: Location,
-  stack: CardStack
+  stack: BlitzCardStack
 ) {
   return initStackImpl(tx, {
     id: tx.clientID,

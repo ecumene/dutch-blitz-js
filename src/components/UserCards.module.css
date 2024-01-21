@@ -1,0 +1,10 @@
+.container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.restContainer {
+    width: 71px;
+    position: relative;
+}

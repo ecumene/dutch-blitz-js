@@ -4,14 +4,14 @@
 
 import type { WriteTransaction } from "@rocicorp/reflect";
 import { Entity, generate } from "@rocicorp/rails";
-import { Card, CardColor, cardColors, cardNumbers } from "./cards";
+import { BlitzCard, CardColor, cardColors, cardNumbers } from "./cards";
 
 export type Location = { x: number; y: number };
 
 export type ClientState = Entity & {
   cursor: Location | null;
-  deck: Card[];
-  pile: Card[];
+  deck: BlitzCard[];
+  pile: BlitzCard[];
   userInfo: UserInfo;
 };
 
@@ -22,21 +22,25 @@ export type UserInfo = {
 };
 
 export {
+  listClientIDs,
   initClientState,
   getClientState,
   putClientState,
   updateClientState,
+  deleteClientState,
   randUserInfo,
 };
 
 const {
+  list: listClientIDs,
   init: initImpl,
   get: getClientState,
   put: putClientState,
   update: updateClientState,
+  delete: deleteClientState,
 } = generate<ClientState>("client-state");
 
-const generateDeck = (owner: UserInfo): Card[] =>
+const generateDeck = (owner: UserInfo): BlitzCard[] =>
   cardColors
     .map((color) =>
       cardNumbers.map((number) => ({
@@ -49,7 +53,7 @@ const generateDeck = (owner: UserInfo): Card[] =>
 
 function initClientState(tx: WriteTransaction, userInfo: UserInfo) {
   const deck = generateDeck(userInfo).sort(() => Math.random() - 0.5);
-  const pile = deck.splice(0, deck.length - 10);
+  const pile = deck.splice(0, deck.length - 13);
   return initImpl(tx, { id: tx.clientID, cursor: null, deck, pile, userInfo });
 }
 

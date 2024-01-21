@@ -6,9 +6,9 @@ import { randUserInfo } from "./model/client-state.js";
 import CursorField from "./cursor-field.js";
 import styles from "./index.module.css";
 import { mutators } from "./model/mutators.js";
-import { useCount } from "./model/subscriptions.js";
+import { useCompetitors, useUser } from "./model/subscriptions.js";
 import Providers from "./providers.js";
-import { SortableContext } from "@dnd-kit/sortable";
+import UserCards from "./components/UserCards.js";
 
 const userID = nanoid();
 const roomID = "my-room";
@@ -39,18 +39,27 @@ function App() {
     void r.mutate.increment({ key: incrementKey, delta: 1 });
   };
 
-  const count = useCount(r, incrementKey);
+  const user = useUser(r);
+  const others = useCompetitors(r);
+  // r.mutate.clearRoom();
+  console.log(others);
 
   // Render app.
   return (
     <Providers>
       <div className={styles.container}>
-        <img className={styles.logo} src="/reflect.svg" />
-        <div className={styles.content}>
-          <div className={styles.count}>{count}</div>
-          <button onClick={handleButtonClick}>Bonk</button>
-          <CursorField r={r} />
-        </div>
+        {user && (
+          <div>
+            {user.userInfo.name} <UserCards pile={user.pile} deck={user.deck} />
+          </div>
+        )}
+        {others.map((client) => (
+          <div>
+            {client.userInfo.name}{" "}
+            <UserCards pile={client.pile} deck={client.deck} />
+          </div>
+        ))}
+        <CursorField r={r} />
       </div>
     </Providers>
   );
