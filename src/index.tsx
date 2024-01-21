@@ -5,6 +5,7 @@ import ReactDOM from "react-dom/client";
 import { randUserInfo } from "./model/client-state.js";
 import CursorField from "./cursor-field.js";
 import styles from "./index.module.css";
+//hello world
 import { mutators } from "./model/mutators.js";
 import { useCompetitors, useUser } from "./model/subscriptions.js";
 import Providers from "./providers.js";
