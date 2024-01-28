@@ -12,8 +12,8 @@ export default function UserCards({ deck, pile }: Props) {
   const [one, two, three, ...rest] = pile;
 
   return (
-    <div className={styles.container}>
-      <div className={styles.restContainer}>
+    <div className="flex gap-4 mt-8">
+      <div className="w-[71px] relative">
         {rest.map((card, i) => (
           <div
             key={i}

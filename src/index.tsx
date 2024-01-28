@@ -1,10 +1,12 @@
-import { ReactNode, StrictMode } from "react";
+import {  StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 
 // Import the generated route tree
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Game } from "./routes/Game";
 import Providers from "./providers";
+
+import './index.css';
 
 const router = createBrowserRouter([
   {

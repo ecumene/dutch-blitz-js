@@ -21,7 +21,7 @@ const Card = React.forwardRef<HTMLDivElement, Props>(
     return (
       <div
         ref={ref}
-        className={styles.card}
+        className="rounded-md bg-white flex items-center justify-center w-[71px] h-[100px]"
         {...rest}
         style={{
           backgroundColor: colorMap[card.color],

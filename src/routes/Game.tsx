@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { randUserInfo } from "../model/client-state.js";
-import styles from "../index.module.css";
 import { useUser } from "../model/subscriptions.js";
 import CursorField from "../cursor-field.js";
 import UserCards from "../components/UserCards.js";
@@ -39,9 +38,9 @@ export const Game = () => {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <div className="absolute box-border p-8 flex flex-col items-start left-0 top-0 w-full h-full bg-[rgb(229,229,229)] overflow-hidden">
       {user && (
-        <div className={styles.cards}>
+        <div className="absolute bottom-0">
           {user.userInfo.name} <UserCards pile={user.pile} deck={user.deck} />
         </div>
       )}
