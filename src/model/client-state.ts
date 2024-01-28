@@ -51,7 +51,7 @@ const generateDeck = (owner: UserInfo): BlitzCard[] =>
     )
     .flat();
 
-function initClientState(tx: WriteTransaction, userInfo: UserInfo) {
+async function initClientState(tx: WriteTransaction, userInfo: UserInfo) {
   const deck = generateDeck(userInfo).sort(() => Math.random() - 0.5);
   const pile = deck.splice(0, deck.length - 13);
   return initImpl(tx, { id: tx.clientID, cursor: null, deck, pile, userInfo });

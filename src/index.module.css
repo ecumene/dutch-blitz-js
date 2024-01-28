@@ -96,3 +96,8 @@ button:active {
   font-size: 2rem;
   color: #24283b;
 }
+
+.cards {
+  position: absolute;
+  bottom: 0
+}

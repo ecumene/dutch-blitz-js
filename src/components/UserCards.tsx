@@ -1,6 +1,7 @@
 import { type BlitzCard } from "../model/cards";
 import styles from "./UserCards.module.css";
 import Card from "./Card";
+import DraggableCard from "./DraggableCard";
 
 type Props = {
   deck: BlitzCard[];
@@ -15,18 +16,23 @@ export default function UserCards({ deck, pile }: Props) {
       <div className={styles.restContainer}>
         {rest.map((card, i) => (
           <div
+            key={i}
             style={{
               position: "absolute",
               top: `${-i * 1}px`,
             }}
           >
-            <Card card={card} />
+            {i === rest.length - 1 ? (
+              <DraggableCard card={card} />
+            ) : (
+              <Card card={card} />
+            )}
           </div>
         ))}
       </div>
-      <Card card={one} />
-      <Card card={two} />
-      <Card card={three} />
+      <DraggableCard card={one} />
+      <DraggableCard card={two} />
+      <DraggableCard card={three} />
     </div>
   );
 }

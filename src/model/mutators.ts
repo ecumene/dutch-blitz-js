@@ -9,6 +9,7 @@ import { Entity } from "@rocicorp/rails";
 import {
   BlitzCard,
   getStackState,
+  initStackState,
   listStackIDs,
   updateStackState,
 } from "./cards.js";
@@ -17,6 +18,7 @@ export const mutators = {
   setCursor,
   appendStack,
   initClientState,
+  initStackState,
   increment,
   clearRoom,
 } satisfies MutatorDefs;
@@ -27,7 +29,6 @@ async function increment(
   tx: WriteTransaction,
   { key, delta }: { key: string; delta: number }
 ) {
-  console.log(`incrementing ${key} by ${delta}`);
   const prev = await tx.get<number>(key);
   const next = (prev ?? 0) + delta;
   await tx.set(key, next);
