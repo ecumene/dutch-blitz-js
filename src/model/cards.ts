@@ -20,6 +20,7 @@ export type BlitzCardStackState = Entity & {
 };
 
 export type BlitzCard = {
+  uuid: string;
   owner: UserInfo;
   color: CardColor;
   number: CardNumber;
@@ -30,11 +31,11 @@ export {
   getStackState,
   putStackState,
   updateStackState,
-  listStackIDs,
+  listStacks,
 };
 
 const {
-  list: listStackIDs,
+  list: listStacks,
   init: initStackImpl,
   get: getStackState,
   put: putStackState,

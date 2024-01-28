@@ -1,6 +1,7 @@
 import type { MutatorDefs, WriteTransaction } from "@rocicorp/reflect";
 import {
   deleteClientState,
+  getClientState,
   initClientState,
   listClientIDs,
   updateClientState,
@@ -10,7 +11,7 @@ import {
   BlitzCard,
   getStackState,
   initStackState,
-  listStackIDs,
+  listStacks,
   updateStackState,
 } from "./cards.js";
 
@@ -19,6 +20,8 @@ export const mutators = {
   appendStack,
   initClientState,
   initStackState,
+  removeCard,
+  updateStackState,
   increment,
   clearRoom,
 } satisfies MutatorDefs;
@@ -35,7 +38,7 @@ async function increment(
 }
 
 async function clearRoom(tx: WriteTransaction) {
-  const ids = [...(await listClientIDs(tx)), ...(await listStackIDs(tx))].map(
+  const ids = [...(await listClientIDs(tx)), ...(await listStacks(tx))].map(
     (value) => value.id
   );
   await Promise.all(ids.map((id) => deleteClientState(tx, id)));
@@ -59,6 +62,19 @@ async function appendStack(
     stack: {
       ...prevState.stack,
       cardStack: [...prevState.stack.cardStack, card],
+      currentNumber: card.number,
     },
+  });
+}
+
+async function removeCard(tx: WriteTransaction, card: BlitzCard) {
+  const client = await getClientState(tx, tx.clientID);
+  if (!client) throw new Error("missing client");
+  const { deck, pile } = client;
+  console.log(deck, pile);
+  await updateClientState(tx, {
+    id: tx.clientID,
+    deck: deck.filter(({ uuid }) => uuid !== card.uuid),
+    pile: pile.filter(({ uuid }) => uuid !== card.uuid),
   });
 }

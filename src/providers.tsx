@@ -5,7 +5,7 @@ import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { useRef } from "react";
 import { useParams } from "react-router-dom";
 import React from "react";
-import { BlitzCard, initStackState } from "./model/cards.js";
+import { BlitzCard, BlitzCardStackState, CardNumber } from "./model/cards.js";
 
 const getUserID = (room: string) => {
   const localID = localStorage.getItem(`${room}/userID`);
@@ -40,17 +40,33 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     new Reflect({ server, userID, auth: userID, roomID, mutators })
   );
 
-  function handleDragEnd(event: DragEndEvent) {
+  async function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
-    console.log(over, active);
     const card = active?.data.current as BlitzCard;
-    if (card && over === null && card.number === 1) {
-      reflect.current.mutate.initStackState({
-        color: active?.data.current?.color,
-        cardStack: [card],
-        currentNumber: 1,
-      });
+    let removeCard = false;
+    if (!card) throw new Error("missing card");
+    if (over === null) {
+      if (card.number === 1) {
+        await reflect.current.mutate.initStackState({
+          color: active?.data.current?.color,
+          cardStack: [card],
+          currentNumber: 1,
+        });
+
+        removeCard = true;
+      }
+    } else {
+      const { id, stack } = over.data.current as BlitzCardStackState;
+      if (
+        stack.currentNumber + 1 === card.number &&
+        card.color === stack.color
+      ) {
+        await reflect.current.mutate.appendStack({ id: id, card });
+      }
     }
+    removeCard = true;
+
+    if (removeCard) await reflect.current.mutate.removeCard(card);
   }
 
   return (

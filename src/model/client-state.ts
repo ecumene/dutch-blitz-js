@@ -5,6 +5,7 @@
 import type { WriteTransaction } from "@rocicorp/reflect";
 import { Entity, generate } from "@rocicorp/rails";
 import { BlitzCard, CardColor, cardColors, cardNumbers } from "./cards";
+import { nanoid } from "nanoid";
 
 export type Location = { x: number; y: number };
 
@@ -44,6 +45,7 @@ const generateDeck = (owner: UserInfo): BlitzCard[] =>
   cardColors
     .map((color) =>
       cardNumbers.map((number) => ({
+        uuid: nanoid(),
         owner,
         color,
         number,

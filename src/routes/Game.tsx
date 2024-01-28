@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { randUserInfo } from "../model/client-state.js";
-import { useUser } from "../model/subscriptions.js";
+import { useStacks, useUser } from "../model/subscriptions.js";
 import CursorField from "../cursor-field.js";
 import UserCards from "../components/UserCards.js";
 import { useParams } from "react-router-dom";
 import { useReflect } from "../providers.js";
+import GameStacks from "../components/GameStacks.js";
 
 const server: string | undefined = import.meta.env.VITE_REFLECT_URL;
 if (!server) {
@@ -20,6 +21,8 @@ export const Game = () => {
 
   const user = useUser(r);
   // r.mutate.clearRoom();
+
+  const stacks = useStacks(r);
 
   useEffect(() => {
     if (import.meta.hot) {
@@ -44,6 +47,7 @@ export const Game = () => {
           {user.userInfo.name} <UserCards pile={user.pile} deck={user.deck} />
         </div>
       )}
+      <GameStacks stacks={stacks} />
       <CursorField r={r} />
     </div>
   );
