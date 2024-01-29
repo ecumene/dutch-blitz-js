@@ -8,21 +8,19 @@ type Props = {
   pile: BlitzCard[];
 };
 
-const Deck = ({ deck }: { deck: BlitzCard[] }) => {
-  const [drawnCards, setDrawnCards] = useState<BlitzCard[]>(
-    deck.slice(deck.length - 3, deck.length)
-  );
+const Pile = ({ pile }: { pile: BlitzCard[] }) => {
+  const [end, setEnd] = useState(0);
 
   const handleDraw = () => {
-    if (drawnCards.length === deck.length) {
-      setDrawnCards([]);
-    } else {
-      setDrawnCards((prev) => [
-        ...prev,
-        ...deck.slice(deck.length - 3, deck.length),
-      ]);
-    }
+    const sound = new Audio("/flutter.mp3");
+    sound.volume = 0.05;
+
+    sound.play();
+
+    setEnd((end) => (end + 3) % pile.length);
   };
+
+  const drawnCards = pile.slice(0, end + 3);
 
   return (
     <>
@@ -30,13 +28,14 @@ const Deck = ({ deck }: { deck: BlitzCard[] }) => {
       <div className="w-[71px] relative">
         {drawnCards.map((card, i) => (
           <div
+            className="z-[999]"
             key={i}
             style={{
               position: "absolute",
               top: `${-i * 1}px`,
             }}
           >
-            {i === deck.length - 1 ? (
+            {i === drawnCards.length - 1 ? (
               <DraggableCard card={card} />
             ) : (
               <Card card={card} />
@@ -49,14 +48,13 @@ const Deck = ({ deck }: { deck: BlitzCard[] }) => {
 };
 
 export default function UserCards({ deck, pile }: Props) {
-  const rest = [...pile];
+  const rest = [...deck];
   const one = rest.pop();
   const two = rest.pop();
   const three = rest.pop();
 
   return (
     <div className="flex gap-4 mt-8">
-      <Deck deck={deck} />
       <div className="w-[71px] relative">
         {rest.map((card, i) => (
           <div
@@ -77,6 +75,8 @@ export default function UserCards({ deck, pile }: Props) {
       {one && <DraggableCard card={one} />}
       {two && <DraggableCard card={two} />}
       {three && <DraggableCard card={three} />}
+
+      <Pile pile={pile} />
     </div>
   );
 }

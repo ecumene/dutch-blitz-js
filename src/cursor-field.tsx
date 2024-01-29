@@ -3,6 +3,7 @@ import { Reflect } from "@rocicorp/reflect/client";
 import { M } from "./model/mutators.js";
 import { useClientState } from "./model/subscriptions.js";
 import { usePresence } from "@rocicorp/reflect/react";
+import Card from "./components/Card.js";
 
 export default function CursorField({ r }: { r: Reflect<M> }) {
   useEffect(() => {
@@ -31,8 +32,11 @@ function Cursor({ r, id }: { r: Reflect<M>; id: string }) {
   const cs = useClientState(r, id);
   if (!cs) return null;
 
-  const { cursor, userInfo } = cs;
+  const { cursor, userInfo, carrying } = cs;
+  const isCurrentUser = cs.id === r.clientID;
   if (!cursor) return null;
+
+  if (window.innerHeight - cursor.y < 200 && !isCurrentUser) return;
 
   return (
     <div
@@ -47,6 +51,7 @@ function Cursor({ r, id }: { r: Reflect<M>; id: string }) {
           overflow: "auto",
         }}
       >
+        {carrying && !isCurrentUser && <Card card={carrying} />}
         <div className="inline-block" style={{ transform: "rotate(-127deg)" }}>
           <span className="text-lg" style={{ color: userInfo.color }}>
             ➤

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { randUserInfo } from "../model/client-state.js";
 import { useStacks, useUser } from "../model/subscriptions.js";
 import CursorField from "../cursor-field.js";
@@ -13,6 +13,7 @@ if (!server) {
 }
 
 export const Game = () => {
+  const initHack = useRef(false);
   const { roomID } = useParams();
 
   if (!roomID) throw new Error("missing room id");
@@ -33,7 +34,8 @@ export const Game = () => {
     }
 
     void (async () => {
-      if (!user) {
+      if (!initHack.current) {
+        initHack.current = true;
         const userInfo = randUserInfo();
         await r.mutate.initClientState(userInfo);
       }

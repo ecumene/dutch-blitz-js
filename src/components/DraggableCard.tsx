@@ -24,6 +24,7 @@ export default function DraggableCard({ card }: Props) {
       style={style}
       {...listeners}
       {...attributes}
+      className="z-[999]"
     />
   );
 }

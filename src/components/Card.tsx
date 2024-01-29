@@ -1,8 +1,5 @@
-import { useState } from "react";
+import { clsx } from "clsx";
 import { BlitzCard } from "../model/cards";
-import styles from "./Card.module.css";
-import { useDraggable } from "@dnd-kit/core";
-import { CSS } from "@dnd-kit/utilities";
 import React from "react";
 
 type Props = {
@@ -10,18 +7,21 @@ type Props = {
 } & React.HTMLProps<HTMLDivElement>;
 
 const colorMap = {
-  red: "#C33149",
-  green: "#A8C256",
-  yellow: "#F4A259",
-  blue: "#2E4057",
+  red: "#DC213D",
+  green: "#1EC154",
+  yellow: "#FFD151",
+  blue: "#0C6DF5",
 };
 
 const Card = React.forwardRef<HTMLDivElement, Props>(
-  ({ card, ...rest }: Props, ref) => {
+  ({ card, className, ...rest }: Props, ref) => {
     return (
       <div
         ref={ref}
-        className="rounded-md bg-white flex items-center justify-center w-[71px] h-[100px]"
+        className={clsx(
+          "rounded-md bg-white flex items-center justify-center w-[71px] h-[100px] font-cursive text-4xl",
+          className
+        )}
         {...rest}
         style={{
           backgroundColor: colorMap[card.color],

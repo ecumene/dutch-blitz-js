@@ -13,6 +13,7 @@ export type ClientState = Entity & {
   cursor: Location | null;
   deck: BlitzCard[];
   pile: BlitzCard[];
+  carrying?: BlitzCard;
   userInfo: UserInfo;
 };
 

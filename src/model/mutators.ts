@@ -18,6 +18,7 @@ import {
 export const mutators = {
   setCursor,
   appendStack,
+  setCarrying,
   initClientState,
   initStackState,
   removeCard,
@@ -42,6 +43,13 @@ async function clearRoom(tx: WriteTransaction) {
     (value) => value.id
   );
   await Promise.all(ids.map((id) => deleteClientState(tx, id)));
+}
+
+async function setCarrying(
+  tx: WriteTransaction,
+  carrying?: BlitzCard
+): Promise<void> {
+  await updateClientState(tx, { id: tx.clientID, carrying });
 }
 
 async function setCursor(
