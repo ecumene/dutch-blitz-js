@@ -11,7 +11,7 @@
 
 import type { Reflect } from "@rocicorp/reflect/client";
 import { useSubscribe } from "@rocicorp/reflect/react";
-import { getClientState, listClientIDs } from "./client-state.js";
+import { getClientState, listClients } from "./client-state.js";
 import type { M } from "./mutators.js";
 import { getStackState, listStacks } from "./cards.js";
 
@@ -33,7 +33,7 @@ export function useCompetitors(r: Reflect<M>) {
 }
 
 export function useClients(r: Reflect<M>) {
-  return useSubscribe(r, listClientIDs, []);
+  return useSubscribe(r, listClients, []);
 }
 
 export function useClientState(r: Reflect<M>, id: string) {

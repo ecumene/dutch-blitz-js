@@ -31,10 +31,12 @@ export {
   getStackState,
   putStackState,
   updateStackState,
+  deleteStacks,
   listStacks,
 };
 
 const {
+  delete: deleteStacks,
   list: listStacks,
   init: initStackImpl,
   get: getStackState,

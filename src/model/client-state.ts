@@ -10,6 +10,7 @@ import { nanoid } from "nanoid";
 export type Location = { x: number; y: number };
 
 export type ClientState = Entity & {
+  score: number;
   cursor: Location | null;
   deck: BlitzCard[];
   pile: BlitzCard[];
@@ -24,8 +25,9 @@ export type UserInfo = {
 };
 
 export {
-  listClientIDs,
+  listClients,
   initClientState,
+  deal,
   getClientState,
   putClientState,
   updateClientState,
@@ -34,7 +36,7 @@ export {
 };
 
 const {
-  list: listClientIDs,
+  list: listClients,
   init: initImpl,
   get: getClientState,
   put: putClientState,
@@ -55,9 +57,22 @@ const generateDeck = (owner: UserInfo): BlitzCard[] =>
     .flat();
 
 async function initClientState(tx: WriteTransaction, userInfo: UserInfo) {
-  const deck = generateDeck(userInfo).sort(() => Math.random() - 0.5);
+  return initImpl(tx, {
+    id: tx.clientID,
+    score: 0,
+    cursor: null,
+    deck: [],
+    pile: [],
+    userInfo,
+  });
+}
+
+async function deal(tx: WriteTransaction, clientID: string) {
+  const client = await getClientState(tx, clientID);
+  if (!client) throw new Error("Couldnt find client with ID");
+  const deck = generateDeck(client.userInfo).sort(() => Math.random() - 0.5);
   const pile = deck.splice(0, deck.length - 13);
-  return initImpl(tx, { id: tx.clientID, cursor: null, deck, pile, userInfo });
+  return updateClientState(tx, { id: clientID, deck, pile });
 }
 
 function randUserInfo(): UserInfo {

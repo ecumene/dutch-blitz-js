@@ -6,6 +6,8 @@ import UserCards from "../components/UserCards.js";
 import { useParams } from "react-router-dom";
 import { useReflect } from "../providers.js";
 import GameStacks from "../components/GameStacks.js";
+import { calcScore } from "../model/mutators.js";
+import ScoreDisplay from "../components/ScoreDisplay.js";
 
 const server: string | undefined = import.meta.env.VITE_REFLECT_URL;
 if (!server) {
@@ -38,6 +40,7 @@ export const Game = () => {
         initHack.current = true;
         const userInfo = randUserInfo();
         await r.mutate.initClientState(userInfo);
+        await r.mutate.deal(r.clientID);
       }
     })();
   }, []);
@@ -45,8 +48,15 @@ export const Game = () => {
   return (
     <div className="absolute box-border p-8 flex flex-col items-start left-0 top-0 w-full h-full bg-[rgb(229,229,229)] overflow-hidden">
       {user && (
-        <div className="absolute bottom-0">
-          {user.userInfo.name} <UserCards pile={user.pile} deck={user.deck} />
+        <div className="absolute flex items-center bottom-0">
+          {user && (
+            <div className="mr-8">
+              {user.userInfo.avatar}&nbsp;
+              {user.userInfo.name}
+              <ScoreDisplay user={user} />
+            </div>
+          )}
+          <UserCards pile={user.pile} deck={user.deck} />
         </div>
       )}
       <GameStacks stacks={stacks} />

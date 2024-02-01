@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { useParams } from "react-router-dom";
 import React from "react";
 import { BlitzCard, BlitzCardStackState, CardNumber } from "./model/cards.js";
+import { ClientState } from "./model/client-state.js";
 
 const tunk = new Audio("/tunk.mp3");
 tunk.volume = 0.05;
@@ -30,6 +31,10 @@ if (!server) {
 }
 
 const ReflectContext = React.createContext<Reflect<M>>(null!);
+
+const winCheck = (client: ClientState) => {
+  return;
+};
 
 export const useReflect = () => {
   return React.useContext(ReflectContext);
